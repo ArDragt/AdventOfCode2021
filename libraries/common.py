@@ -8,7 +8,10 @@ class FileHandler:
         self.root_path = self.base_path.parent
         self.input_path = self.root_path.joinpath(input_filename)
 
-    def int_data_from_text(self):
+    def read_int_data(self):
         with open(self.input_path, 'r') as _input_file:
             return [int(_row.strip()) for _row in _input_file]
 
+    def read_text_data(self):
+        with open(self.input_path, 'r') as _input_file:
+            return [_row.strip() for _row in _input_file]
