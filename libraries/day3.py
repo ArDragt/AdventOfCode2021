@@ -22,6 +22,12 @@ class DataHandler:
             elif bit == '0':
                 self.position_tracker[count]['zeros'] += 1
 
+    def increment_tracker_bit(self, report_row, position):
+        if report_row[position] == '1':
+            self.position_tracker[position]['ones'] += 1
+        elif report_row[position] == '0':
+            self.position_tracker[position]['zeros'] += 1
+
     def get_most_common(self, position: int) -> str:
         if self.position_tracker[position]['ones'] > self.position_tracker[position]['zeros']:
             return '1'
@@ -33,6 +39,13 @@ class DataHandler:
             return '1'
         else:
             return '0'
+
+    def get_bit_count(self, position, key):
+        return self.position_tracker[position][key]
+
+    @staticmethod
+    def filter_rows(input_data, position, bit_value):
+        return [row for row in input_data if row[position] == bit_value]
 
     @staticmethod
     def get_decimal(bin_string) -> int:
