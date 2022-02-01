@@ -29,7 +29,7 @@ public class d3p1 {
         // and add to the overall diagnostics tracker
         DiagnosticTracker tracker = new DiagnosticTracker();
         for (int i = 0; i < 12; i++) {
-            tracker.addBitTracker(i, new BitTracker(i));
+            tracker.addBitTracker(i, new BitTracker());
         }
         
         // Loop through input data, one row at a time
