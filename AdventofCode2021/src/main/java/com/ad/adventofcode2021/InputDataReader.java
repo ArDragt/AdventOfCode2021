@@ -36,4 +36,18 @@ class InputDataReader {
         }
         return inputData;
     }
+    
+    String readTextLine() {
+        Path dir = Paths.get(basePath);
+        Path inputFilePath = dir.resolve(filePath);
+        String inputData = null;
+        
+        try {
+            inputData = Files.readString(inputFilePath);
+        }
+        catch (IOException e) {
+            System.out.println(e.toString());
+        }
+        return inputData;
+    }
 }
