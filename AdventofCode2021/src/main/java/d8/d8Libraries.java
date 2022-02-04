@@ -1,4 +1,4 @@
-package com.ad.adventofcode2021;
+package d8;
 
 import java.util.*;
 
