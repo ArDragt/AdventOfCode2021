@@ -5,13 +5,29 @@ import java.util.List;
 
 class LowPointAnalyzer {
     private List<HeightMapData> heightData = new ArrayList<>();
-    private List<LowPoint> lowPoints = new ArrayList<>();
+    private List<HeightPoint> lowPoints = new ArrayList<>();
+    int maxRow;
+    int maxCol;
+
+    void setMaxRow() {
+        maxRow = heightData.size() - 1;
+    }
+    void setMaxCol() {
+        maxCol = heightData.get(0).data.length() - 1;
+    }
 
     void addHeightData(HeightMapData rowData) {
         heightData.add(rowData);
     }
 
-    private int getPrevRowValue(int currentRow, int currentColumn) {
+    HeightMapData getHeightPointData(int rowNumber) {
+        return heightData.stream()
+                .filter(e -> e.rowNumber == rowNumber)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("No data found"));
+    }
+
+    int getPrevRowValue(int currentRow, int currentColumn) {
         HeightMapData previousRow = heightData.stream()
                 .filter(e -> e.rowNumber == currentRow - 1)
                 .findFirst()
@@ -19,7 +35,7 @@ class LowPointAnalyzer {
         return Character.getNumericValue(previousRow.data.charAt(currentColumn));
     }
 
-    private int getNextRowValue(int currentRow, int currentColumn) {
+    int getNextRowValue(int currentRow, int currentColumn) {
         HeightMapData previousRow = heightData.stream()
                 .filter(e -> e.rowNumber == currentRow + 1)
                 .findFirst()
@@ -27,11 +43,19 @@ class LowPointAnalyzer {
         return Character.getNumericValue(previousRow.data.charAt(currentColumn));
     }
 
-    private int getPrevColValue(HeightMapData currentRow, int currentColumn) {
+    int getPointValue(int row, int column) {
+        HeightMapData targetRow = heightData.stream()
+                .filter(e -> e.rowNumber == row)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("No data found"));
+        return Character.getNumericValue(targetRow.data.charAt(column));
+    }
+
+    int getPrevColValue(HeightMapData currentRow, int currentColumn) {
         return Character.getNumericValue(currentRow.data.charAt(currentColumn - 1));
     }
 
-    private int getNextColValue(HeightMapData currentRow, int currentColumn) {
+    int getNextColValue(HeightMapData currentRow, int currentColumn) {
         return Character.getNumericValue(currentRow.data.charAt(currentColumn + 1));
     }
 
@@ -91,15 +115,15 @@ class LowPointAnalyzer {
     void findLowPoints() {
         int rowIndex = 0;
         for (HeightMapData row : heightData) {
-            for (int columNumber=0;columNumber<row.data.length();columNumber++) {
-                boolean isLowPoint = checkLowPoint(row, Character.getNumericValue(row.data.charAt(columNumber)),
-                        columNumber);
+            for (int colNumber=0;colNumber<row.data.length();colNumber++) {
+                boolean isLowPoint = checkLowPoint(row, Character.getNumericValue(row.data.charAt(colNumber)),
+                        colNumber);
                 if (isLowPoint) {
-                    addLowPoint(new LowPoint(rowIndex, columNumber,
-                            Character.getNumericValue(row.data.charAt(columNumber))));
+                    addLowPoint(new HeightPoint(rowIndex, colNumber,
+                            Character.getNumericValue(row.data.charAt(colNumber))));
                 }
-                rowIndex++;
             }
+            rowIndex++;
         }
     }
 
@@ -110,20 +134,10 @@ class LowPointAnalyzer {
 
     }
 
-    private void addLowPoint(LowPoint lowPoint) {
-        lowPoints.add(lowPoint);
-    }
+    private void addLowPoint(HeightPoint lowPoint) {lowPoints.add(lowPoint);}
 
-    private class LowPoint {
-        private final int row;
-        private final int column;
-        private final int value;
+    List<HeightPoint> getLowPoints() {return lowPoints;}
 
-        private LowPoint(int row, int column, int value) {
-            this.row = row;
-            this.column = column;
-            this.value = value;
-        }
-    }
+    HeightPoint getLowPoint(int index) {return lowPoints.get(index);}
 
 }

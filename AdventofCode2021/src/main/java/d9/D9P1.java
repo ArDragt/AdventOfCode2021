@@ -1,6 +1,7 @@
 package d9;
 
 import com.ad.adventofcode2021.InputDataReader;
+
 import java.util.List;
 
 class D9P1 {
